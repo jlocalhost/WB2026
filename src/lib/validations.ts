@@ -11,9 +11,9 @@ export const PersonalDetailsSchema = z.object({
     qualification: z.string().min(1, "Please select your qualification"),
     politicalComfort: z.enum(["Yes", "No"]),
     outboundExp: z.enum(["Yes", "No"]),
-    expYears: z.coerce.number().min(1, "Min 1").max(10, "Max 10").optional().or(z.literal(0)),
+    expYears: z.coerce.number().min(0, "Min 0").max(10, "Max 10").optional().default(0),
     bengaliProficiency: z.enum(["Yes", "No"]),
-    timingComfort: z.enum(["Yes", "No"]),
+    timingComfort: z.enum(["Yes", "No"]),   
 });
 
 export type PersonalDetailsInput = z.infer<typeof PersonalDetailsSchema>;

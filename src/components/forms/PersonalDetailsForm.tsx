@@ -18,6 +18,7 @@ export const PersonalDetailsForm: React.FC = () => {
     const t = translations[lang];
     const formRef = useRef<HTMLFormElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
+    const [localResume, setLocalResume] = useState<{ name: string, type: string, base64: string } | null>(null);
 
     const {
         register,
@@ -64,8 +65,17 @@ export const PersonalDetailsForm: React.FC = () => {
     const selectedDistrict = watch("district");
 
     React.useEffect(() => {
-        if (selectedDistrict) {
+        if (hasOutboundExp === "No") {
+            setValue("expYears", 0);
+        }
+    }, [hasOutboundExp, setValue]);
+
+    const lastDistrict = useRef<string | undefined>(undefined);
+
+    React.useEffect(() => {
+        if (selectedDistrict && selectedDistrict !== lastDistrict.current) {
             setValue("vidhansabha", "");
+            lastDistrict.current = selectedDistrict;
         }
     }, [selectedDistrict, setValue]);
 
@@ -74,10 +84,14 @@ export const PersonalDetailsForm: React.FC = () => {
         : [];
 
     const onSubmit = (data: PersonalDetailsInput) => {
-        // Update form data first
-        updateFormData(data as any);
+        // Update form data including local resume
+        updateFormData({
+            ...data,
+            resumeName: localResume?.name,
+            resumeType: localResume?.type,
+            resumeBase64: localResume?.base64,
+        } as any);
 
-        // Use a simpler animation or just skip for reliability if it fails
         if (formRef.current) {
             gsap.to(formRef.current, {
                 x: -20,
@@ -281,17 +295,21 @@ export const PersonalDetailsForm: React.FC = () => {
                 <div className="stagger-item">
                     <FileUpload
                         label={t.uploadResume}
-                        onChange={(file) => {
-                            if (file) {
-                                updateFormData({
-                                    resumeName: file.name,
-                                    resumeType: file.type,
-                                    resumeBase64: file.base64,
-                                });
-                            }
-                        }}
+                        onChange={(file) => setLocalResume(file)}
+                        error={localResume ? undefined : (errors as any).resume?.message}
                     />
                 </div>
+
+                {Object.keys(errors).length > 0 && (
+                    <div className="p-4 rounded-2xl bg-red-50 border border-red-100 animate-in fade-in slide-in-from-top-2">
+                        <p className="text-sm font-bold text-red-600 mb-1">Please fix the following errors:</p>
+                        <ul className="text-xs text-red-500 list-disc list-inside">
+                            {Object.entries(errors).map(([key, err]) => (
+                                <li key={key}>{(err as any).message}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
 
                 <button
                     type="submit"
