@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary: #1e3a8a; /* Deep Navy */
+  --color-primary-light: #3b82f6; 
+  --color-accent: #f97316; /* Professional Orange */
+  --color-accent-hover: #ea580c;
+  --color-surface: #ffffff;
+  --color-glass: rgba(255, 255, 255, 0.7);
+  --color-glass-border: rgba(255, 255, 255, 0.3);
+}
+
+:root {
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+  --primary: #1e3a8a;
+  --accent: #f97316;
+}
+
+body {
+  background: radial-gradient(circle at top left, #f8fafc, #e2e8f0);
+  color: var(--foreground);
+  font-family: var(--font-poppins), sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Premium Visual Utilities */
+.glass-panel {
+  @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+  border-radius: 24px;
+}
+
+.premium-card {
+  @apply bg-white border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] transition-all duration-300;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-light;
+}
+
+.btn-premium {
+  @apply relative overflow-hidden transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+}
+
+.btn-premium:hover {
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+  transform: translateY(-1px);
+}
+
+input, select, textarea {
+  @apply bg-white/50 backdrop-blur-sm focus:bg-white transition-all duration-300;
+}
